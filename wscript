@@ -28,6 +28,7 @@
 
 from __future__ import print_function
 from rtems_waf import rtems
+from net_services import netservices
 
 import netlegacy
 import sys
@@ -40,6 +41,13 @@ try:
     import rtems_waf.rtems as rtems
 except rtems_waf.DoesNotExist:
     print("error: no rtems_waf git submodule; see README.waf")
+    sys.exit(1)
+
+
+try:
+    import net_services.netservices as netservices
+except net_services.DoesNotExist:
+    print("error: no net_services git submodule; see README.waf")
     sys.exit(1)
 
 
@@ -62,5 +70,6 @@ def recurse(ctx):
 
 def build(bld):
     netlegacy.build(bld)
+    netservices.build(bld)
     rtems.build(bld)
     recurse(bld)
