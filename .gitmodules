@@ -1,3 +1,6 @@
 [submodule "rtems_waf"]
 	path = rtems_waf
 	url = git://git.rtems.org/rtems_waf.git
+[submodule "net_services"]
+	path = net_services
+	url = https://github.com/kingneo77/net_services
