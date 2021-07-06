@@ -29,6 +29,7 @@
 from rtems_waf import rtems
 import bsp_drivers
 import os
+from net_services import netservices
 
 source_files = []
 include_files = {}
@@ -125,11 +126,23 @@ def build(bld):
               use=['rtemsbsp', 'networking'],
               source=nfs_source)
 
+    net_services_files = netservices.get_files(bld)
+
+    for key, value in net_services_files.items():
+        bld.stlib(target=key,
+                  features='c',
+                  cflags=['-O2', '-g'],
+                  includes = value['includes'],
+                  source=value['sources'])
+
     bld.install_files(os.path.join(bld.env.PREFIX, arch_lib_path),
                       ["libnetworking.a", 'libpppd.a', 'libnfs.a'])
     bld.install_files(os.path.join(bld.env.PREFIX, arch_lib_path,
                                    'include', 'libchip'),
                       install_file_list('bsps', 'include', 'libchip'))
+    bld.install_files(os.path.join(bld.env.PREFIX, arch_lib_path),
+                      ["libtftpfs.a", 'libtelnetd.a'])
+
     for i in include_files:
         if 'include' in os.path.split(i):
             bld.install_files(os.path.join(bld.env.PREFIX,
